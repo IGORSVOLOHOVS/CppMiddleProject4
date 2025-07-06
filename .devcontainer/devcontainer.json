@@ -11,11 +11,12 @@
         "llvm-vs-code-extensions.vscode-clangd",
         "vadimcn.vscode-lldb",
         "twxs.cmake",
-        "ms-vscode.cmake-tools"
+        "ms-vscode.cmake-tools",
+        "jeff-hykin.better-cpp-syntax",
+        "matepek.vscode-catch2-test-adapter",
+        "ryzngard.vscode-header-source",
+        "MatthewEvers.compiler-explorer"
       ]
     }
-  },
-  "mounts": [
-    "source=${env:HOME}/.gitconfig,target=/etc/gitconfig,type=bind,consistency=cached"
-  ]
+  }
 }

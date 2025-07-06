@@ -1,5 +1,6 @@
 #include "metric.hpp"
 
+#include <iterator>
 #include <unistd.h>
 
 #include <algorithm>
@@ -23,12 +24,16 @@
 namespace analyser::metric {
 
 void MetricExtractor::RegisterMetric(std::unique_ptr<IMetric> metric) {
-    // здесь ваш код
+    if(metric) metrics.emplace_back(std::move(metric));
 }
 
 MetricResults MetricExtractor::Get(const function::Function &func) const {
     // здесь ваш код
-    return {};
+    MetricResults res{};
+    std::ranges::transform(metrics, std::back_inserter(res), [&func](auto&& m){
+        return m->Calculate(func);
+    });
+    return res;
 }
 
 }  // namespace analyser::metric

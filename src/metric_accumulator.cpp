@@ -22,10 +22,15 @@ namespace analyser::metric_accumulator {
 
 void MetricsAccumulator::AccumulateNextFunctionResults(const std::vector<metric::MetricResult> &metric_results) const {
     // здесь ваш код
+    std::ranges::for_each(metric_results, [&accumulators = accumulators](const auto& res){
+        accumulators.at(res.metric_name)->Accumulate(res);
+    });
 }
 
 void MetricsAccumulator::ResetAccumulators() {
-    // здесь ваш код
+    std::ranges::for_each(accumulators | std::views::values, [](auto&& k){
+        k->Reset();
+    });
 }
 
 }  // namespace analyser::metric_accumulator

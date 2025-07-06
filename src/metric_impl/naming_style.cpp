@@ -20,5 +20,12 @@
 namespace analyser::metric::metric_impl {
 
 // здесь ваш код
+    MetricResult::ValueType NamingStyleMetric::CalculateImpl(const function::Function& f) const{        
+        throw std::runtime_error("NamingStyleMetric::CalculateImpl is not implemented yet!");
+    }
+
+    std::string NamingStyleMetric::Name() const {
+        throw std::runtime_error("NamingStyleMetric::CalculateImpl is not implemented yet!");
+    }
 
 }  // namespace analyser::metric::metric_impl

@@ -64,6 +64,7 @@ class AnalyserConan(ConanFile):
         deps.generate()
         
         tc = CMakeToolchain(self)
+        tc.variables["CMAKE_EXPORT_COMPILE_COMMANDS"] = True 
         tc.generate()
     
     def build(self):

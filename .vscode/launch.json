@@ -7,16 +7,41 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Launch Analyser",
-            "program": "${workspaceFolder}/build/Analyser",
+            "name": "Launch: comments.py loops.py",
+            "program": "${workspaceFolder}/build/analyser",
             "args": [
-                "-i",
-                "input.txt",
-                "--command",
-                "checksum"
+                "-f",
+                "${workspaceFolder}/files/comments.py",
+                "${workspaceFolder}/files/loops.py"
             ],
-            "cwd": "${workspaceFolder}/build"
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Launch: sample.py",
+            "program": "${workspaceFolder}/build/analyser",
+            "args": [
+                "-f",
+                "${workspaceFolder}/files/sample.py"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Test: Metric",
+            "program": "${workspaceFolder}/build/src/metric_impl/metric_test",
+            "args": [],
+            "cwd": "${workspaceFolder}/build/src/metric_impl/tests/files"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Test: Metric Accumulator",
+            "program": "${workspaceFolder}/build/src/metric_accumulator_impl/metric_accumulator_test",
+            "args": [],
+            "cwd": "${workspaceFolder}/build/src/metric_accumulator_impl"
         }
-
     ]
 }

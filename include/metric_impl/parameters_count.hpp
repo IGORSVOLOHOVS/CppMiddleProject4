@@ -18,6 +18,8 @@ namespace analyser::metric::metric_impl {
 
 struct CountParametersMetric final : public IMetric {
     // здесь ваш код
+    MetricResult::ValueType CalculateImpl(const function::Function& f) const;
+    std::string Name() const;
 };
 
 }  // namespace analyser::metric::metric_impl

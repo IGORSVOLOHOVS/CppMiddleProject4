@@ -38,10 +38,18 @@ struct MetricsAccumulator {
     template <typename Accumulator>
     void RegisterAccumulator(const std::string &metric_name, std::unique_ptr<Accumulator> acc) {
         // здесь ваш код
+        accumulators.try_emplace(metric_name, std::move(acc));
     }
     template <typename Accumulator>
+<<<<<<< Updated upstream
     const Accumulator &GetFinalizedAccumulator(const std::string &metric_name) const {
         // здесь ваш код
+=======
+    const Accumulator& GetFinalizedAccumulator(const std::string& metric_name) const {
+        auto& acc = dynamic_cast<Accumulator&>(*accumulators.at(metric_name));
+        acc.Finalize();
+        return acc;
+>>>>>>> Stashed changes
     }
     void AccumulateNextFunctionResults(const std::vector<metric::MetricResult> &metric_results) const;
 
