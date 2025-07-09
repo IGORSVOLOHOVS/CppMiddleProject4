@@ -1,6 +1,7 @@
 #include "metric.hpp"
 
 #include <iterator>
+#include <stdexcept>
 #include <unistd.h>
 
 #include <algorithm>
@@ -24,15 +25,20 @@
 namespace analyser::metric {
 
 void MetricExtractor::RegisterMetric(std::unique_ptr<IMetric> metric) {
-    if(metric) metrics.emplace_back(std::move(metric));
+    if(metric) {
+        metrics.emplace_back(std::move(metric));
+    }else{
+        throw std::runtime_error("MetricExtractor::RegisterMetric metric is nullptr");
+    }
 }
 
 MetricResults MetricExtractor::Get(const function::Function &func) const {
-    MetricResults res{};
-    std::ranges::transform(metrics, std::back_inserter(res), [&func](auto&& m){
-        return m->Calculate(func);
-    });
-    return res;
+    namespace vs = std::views;
+    namespace rs = std::ranges;
+    
+    return metrics | vs::transform([&func](auto&& metric){
+        return metric->Calculate(func);
+    }) | rs::to<std::vector>();
 }
 
 }  // namespace analyser::metric

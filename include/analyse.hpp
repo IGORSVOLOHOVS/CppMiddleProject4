@@ -54,16 +54,17 @@ concept AnalysisResult2DRange = rs::range<R> && AnalysisResultRange<rs::range_va
 
 AnalysisResultRange auto AnalyseFunctions(const std::vector<std::string>& files,
                       const analyser::metric::MetricExtractor& metric_extractor) {
-    std::vector<FunctionAnalysisResult> res{};
-    rs::for_each(files, [&metric_extractor, &res](const auto& str){
-        auto file = file::File{str};
+    namespace vs = std::views;
+    namespace rs = std::ranges;
+    
+    auto res = files | vs::transform([](auto&& file_str){
+        auto file = file::File{file_str};
         auto functions = function::FunctionExtractor{}.Get(file);
-
-        rs::for_each(functions, [&metric_extractor, &res](const auto& f){
-            auto metrics = metric_extractor.Get(f);
-            res.push_back({.func_info = f, .metrics = metrics});
-        });
-    });
+        return functions;
+    }) | vs::join | vs::transform([&metric_extractor](auto&& f){
+        auto metrics = metric_extractor.Get(f);
+        return FunctionAnalysisResult{.func_info = f, .metrics = metrics};
+    }) | rs::to<std::vector>(); 
 
     return res;
 }
@@ -87,12 +88,9 @@ AnalysisResult2DRange auto SplitByFiles(const AnalysisResultRange auto& analysis
 void AccumulateFunctionAnalysis(
     const AnalysisResultRange auto& analysis, const analyser::metric_accumulator::MetricsAccumulator& accumulator) {
     
-    rs::for_each(analysis, [&accumulator](const auto& far){
-        accumulator.AccumulateNextFunctionResults(far.metrics);
-    
-    });
-
-       
+    rs::for_each(analysis, [&accumulator](const auto& metric){
+        accumulator.AccumulateNextFunctionResults(metric);
+    }, &FunctionAnalysisResult::metrics);
 }
 
 }  // namespace analyser

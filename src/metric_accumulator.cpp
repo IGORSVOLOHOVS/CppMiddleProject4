@@ -18,17 +18,20 @@
 #include <variant>
 #include <vector>
 
+namespace rs = std::ranges;
+namespace vs = std::views;
+
 namespace analyser::metric_accumulator {
 
 void MetricsAccumulator::AccumulateNextFunctionResults(const std::vector<metric::MetricResult> &metric_results) const {
-    std::ranges::for_each(metric_results, [&accumulators = accumulators](const auto& res){
+    rs::for_each(metric_results, [&accumulators = accumulators](const auto& res){
         accumulators.at(res.metric_name)->Accumulate(res);
     });
 }
 
 void MetricsAccumulator::ResetAccumulators() {
-    std::ranges::for_each(accumulators | std::views::values, [](auto&& k){
-        k->Reset();
+    rs::for_each(accumulators | vs::values, [](auto&& acc){
+        acc->Reset();
     });
 }
 
