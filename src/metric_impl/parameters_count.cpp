@@ -16,7 +16,6 @@
 
 namespace analyser::metric::metric_impl {
 
-    // здесь ваш код
     MetricResult::ValueType CountParametersMetric::CalculateImpl(const function::Function& f) const{        
         auto res = f.ast | std::views::split('\n') | 
         std::views::transform([](auto&& r){
@@ -27,7 +26,7 @@ namespace analyser::metric::metric_impl {
             return sv.contains("identifier");
         }) | std::ranges::to<std::vector>();
 
-        return static_cast<int>(res.size() - 1); // identifier like function name
+        return static_cast<int>(res.size() - 1); 
     }
 
     std::string CountParametersMetric::Name() const {

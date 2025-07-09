@@ -21,7 +21,6 @@
 namespace analyser::metric_accumulator {
 
 void MetricsAccumulator::AccumulateNextFunctionResults(const std::vector<metric::MetricResult> &metric_results) const {
-    // здесь ваш код
     std::ranges::for_each(metric_results, [&accumulators = accumulators](const auto& res){
         accumulators.at(res.metric_name)->Accumulate(res);
     });

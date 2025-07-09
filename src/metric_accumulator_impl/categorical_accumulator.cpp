@@ -19,9 +19,6 @@
 
 namespace analyser::metric_accumulator::metric_accumulator_impl {
 
-// здесь ваш код
-// std::unordered_map<std::string, int> categories_freq;
-// is_finalized
 void CategoricalAccumulator::Accumulate(const metric::MetricResult& metric_result){
     if(is_finalized) Reset();
 

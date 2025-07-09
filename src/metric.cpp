@@ -28,7 +28,6 @@ void MetricExtractor::RegisterMetric(std::unique_ptr<IMetric> metric) {
 }
 
 MetricResults MetricExtractor::Get(const function::Function &func) const {
-    // здесь ваш код
     MetricResults res{};
     std::ranges::transform(metrics, std::back_inserter(res), [&func](auto&& m){
         return m->Calculate(func);

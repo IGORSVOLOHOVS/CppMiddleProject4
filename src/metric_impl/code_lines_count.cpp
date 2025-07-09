@@ -22,10 +22,9 @@
 #include <vector>
 
 namespace analyser::metric::metric_impl {
-    // здесь ваш код
     MetricResult::ValueType CodeLinesCountMetric::CalculateImpl(const function::Function& f) const{
         auto res = f.ast | std::views::split('\n') | std::views::transform([](auto&& r){
-            return std::string_view{r}; // false [17,
+            return std::string_view{r}; 
         }) | std::views::filter([](auto&& str){
             return !str.contains("comment");
         }) | std::views::transform([](auto&& r){

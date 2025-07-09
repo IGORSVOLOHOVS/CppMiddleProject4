@@ -24,7 +24,6 @@ using namespace std::string_view_literals;
 
 namespace analyser::metric::metric_impl {
 
-    // здесь ваш код
     MetricResult::ValueType CyclomaticComplexityMetric::CalculateImpl(const function::Function& f) const{
         static const std::unordered_set STATEMENTS = {
             "if_statement"sv,

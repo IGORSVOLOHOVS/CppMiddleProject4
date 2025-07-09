@@ -19,12 +19,6 @@
 
 namespace analyser::metric_accumulator::metric_accumulator_impl {
 
-// здесь ваш код
-    // int sum = 0;
-    // int count = 0;
-    // double average = 0;
-    // is_finalized
-
     void SumAverageAccumulator::Accumulate(const metric::MetricResult& metric_result) {
         if(is_finalized) Reset();
 

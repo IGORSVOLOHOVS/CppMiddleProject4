@@ -6,7 +6,6 @@
 
 namespace analyser::metric::metric_impl {
 
-// здесь ваш код
 class CountParametersMetricTest : public testing::Test {
 protected:
     function::FunctionExtractor extr_{};

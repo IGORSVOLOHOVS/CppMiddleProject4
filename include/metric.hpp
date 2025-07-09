@@ -26,17 +26,9 @@ namespace rs = std::ranges;
 namespace analyser::metric {
 
 struct MetricResult {
-<<<<<<< Updated upstream
-    using ValueType = int;
-    // using ValueType = std::variant<int, std::string>; // если захотите реализовывать метрику
-    // naming style
-    std::string metric_name;  // Название метрики
-    ValueType value;          // Значение метрики
-=======
     using ValueType = std::variant<int, std::string>;
-    std::string metric_name; // Название метрики
-    ValueType value;         // Значение метрики
->>>>>>> Stashed changes
+    std::string metric_name; 
+    ValueType value;         
 };
 
 struct IMetric {

@@ -29,18 +29,7 @@ namespace analyser {
 namespace rv = std::ranges::views;
 namespace rs = std::ranges;
 
-<<<<<<< Updated upstream
-auto AnalyseFunctions(const std::vector<std::string> &files,
-                      const analyser::metric::MetricExtractor &metric_extractor) {
-=======
 
-// AnalyseFunctions, которая:
-// принимает список имен файлов и объект MetricExtractor,
-// запускает создание структур File на основе имен файлов,
-// для каждого файла с помощью FunctionExtractor выделяет список объектов Function,
-// объединяет списки объектов Function в один список,
-// выделяет из каждой функции метрики,
-// возвращает вектор пар из объекта Function и набора результатов вычисления метрик MetricResult;
 struct FunctionAnalysisResult {
     analyser::function::Function func_info;
     analyser::metric::MetricResults metrics;
@@ -65,8 +54,6 @@ concept AnalysisResult2DRange = rs::range<R> && AnalysisResultRange<rs::range_va
 
 AnalysisResultRange auto AnalyseFunctions(const std::vector<std::string>& files,
                       const analyser::metric::MetricExtractor& metric_extractor) {
->>>>>>> Stashed changes
-    // здесь ваш код
     std::vector<FunctionAnalysisResult> res{};
     rs::for_each(files, [&metric_extractor, &res](const auto& str){
         auto file = file::File{str};
@@ -81,19 +68,6 @@ AnalysisResultRange auto AnalyseFunctions(const std::vector<std::string>& files,
     return res;
 }
 
-<<<<<<< Updated upstream
-auto SplitByClasses(const auto &analysis) {
-    // здесь ваш код
-}
-
-auto SplitByFiles(const auto &analysis) {
-    // здесь ваш код
-}
-
-void AccumulateFunctionAnalysis(const auto &analysis,
-                                const analyser::metric_accumulator::MetricsAccumulator &accumulator) {
-    // здесь ваш код
-=======
 AnalysisResult2DRange auto SplitByClasses(const AnalysisResultRange auto& analysis) {
     auto res = analysis | std::views::filter([](const auto& far){
         return far.func_info.class_name.has_value();
@@ -119,7 +93,6 @@ void AccumulateFunctionAnalysis(
     });
 
        
->>>>>>> Stashed changes
 }
 
 }  // namespace analyser
