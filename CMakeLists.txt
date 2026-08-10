@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.25)
 project(analyser VERSION 1.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 26)
+# MSVC has no separate C++26 switch: its newest mode is /std:c++latest, which
+# CMake exposes as CXX23. Asking for 26 makes CMake refuse to generate at all,
+# so on MSVC we ask for the newest dialect it does have. GCC/Clang keep 26.
+if(MSVC)
+    set(CMAKE_CXX_STANDARD 23)
+else()
+    set(CMAKE_CXX_STANDARD 26)
+endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 

@@ -7,7 +7,9 @@
 
 inline int ToInt(std::string_view value) {
     int result{};
-    auto [parse_end_ptr, error_code] = std::from_chars(value.begin(), value.end(), result);
+    // from_chars takes const char*, not iterators: in libstdc++ string_view's
+    // iterator happens to be a raw pointer, in the MSVC STL it is a class.
+    auto [parse_end_ptr, error_code] = std::from_chars(value.data(), value.data() + value.size(), result);
     if (error_code != std::errc{} || parse_end_ptr != value.data() + value.size()) {
         throw std::invalid_argument("Cannot convert '" + std::string(value) + "' to integral");
     }

@@ -1,6 +1,8 @@
 #include "metric_accumulator.hpp"
 
+#if __has_include(<unistd.h>)  // POSIX-only header, MSVC does not ship it
 #include <unistd.h>
+#endif
 
 #include <algorithm>
 #include <any>

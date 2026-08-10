@@ -1,9 +1,13 @@
 #include "metric_impl/cyclomatic_complexity.hpp"
 
+#if __has_include(<flat_set>)  // C++23, still missing from MSVC 19.44 STL
 #include <flat_set>
+#endif
 #include <numeric>
 #include <string_view>
+#if __has_include(<unistd.h>)  // POSIX-only header, MSVC does not ship it
 #include <unistd.h>
+#endif
 
 #include <algorithm>
 #include <array>

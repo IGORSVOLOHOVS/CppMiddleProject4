@@ -3,7 +3,9 @@
 #include <charconv>
 #include <set>
 #include <stdexcept>
+#if __has_include(<unistd.h>)  // POSIX-only header, MSVC does not ship it
 #include <unistd.h>
+#endif
 
 #include <algorithm>
 #include <array>
@@ -32,7 +34,9 @@ namespace analyser::metric::metric_impl {
 
             auto start_pos = r.find_first_of('[');
             auto end_pos = r.find_first_of(',');
-            auto [e,errc] = std::from_chars(r.begin() + start_pos + 1, r.begin() + end_pos, tmp_val);
+            // from_chars takes const char*, not iterators: in libstdc++ string_view's
+            // iterator happens to be a raw pointer, in the MSVC STL it is a class.
+            auto [e,errc] = std::from_chars(r.data() + start_pos + 1, r.data() + end_pos, tmp_val);
             if(errc != std::errc()){
                 throw std::runtime_error("CodeLinesCountMetric::CalculateImpl parsing line index error!");
             }
