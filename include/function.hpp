@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANALYSER_FUNCTION_HPP
+#define ANALYSER_FUNCTION_HPP
 #if __has_include(<unistd.h>)  // POSIX-only header, MSVC does not ship it
 #include <unistd.h>
 #endif
@@ -61,3 +62,5 @@ private:
 };
 
 }  // namespace analyser::function
+
+#endif  // ANALYSER_FUNCTION_HPP

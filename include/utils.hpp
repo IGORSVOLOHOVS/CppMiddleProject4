@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANALYSER_UTILS_HPP
+#define ANALYSER_UTILS_HPP
 
 #include <charconv>
 #include <stdexcept>
@@ -15,3 +16,5 @@ inline int ToInt(std::string_view value) {
     }
     return result;
 }
+
+#endif  // ANALYSER_UTILS_HPP
