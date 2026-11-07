@@ -28,33 +28,21 @@ using namespace std::string_view_literals;
 
 namespace analyser::metric::metric_impl {
 
-    MetricResult::ValueType CyclomaticComplexityMetric::CalculateImpl(const function::Function& f) const{
-        static const std::unordered_set STATEMENTS = {
-            "if_statement"sv,
-            "elif_clause"sv,
-            "while_statement"sv,
-            "for_statement"sv,
-            "try_statement"sv,
-            "except_clause"sv,
-            "finally_clause"sv,
-            "match_statement"sv,
-            "case_pattern"sv,
-            "assert_statement"sv,
-            "conditional_expression"sv
-        };
-        
-        auto res = f.ast | std::views::split('(') | std::views::drop(1) | std::views::transform([](auto&& r){
-            auto sv = std::string_view{r};
-            return sv.substr(0, sv.find_first_of(" :"));
-        }) | std::views::filter([](auto&& sv){
-            return STATEMENTS.contains(std::string{sv});
-        }) | std::ranges::to<std::vector>();
+MetricResult::ValueType CyclomaticComplexityMetric::CalculateImpl(const function::Function &f) const {
+    static const std::unordered_set STATEMENTS = {"if_statement"sv,     "elif_clause"sv,           "while_statement"sv,
+                                                  "for_statement"sv,    "try_statement"sv,         "except_clause"sv,
+                                                  "finally_clause"sv,   "match_statement"sv,       "case_pattern"sv,
+                                                  "assert_statement"sv, "conditional_expression"sv};
 
-        return static_cast<int>(res.size());
-    }
+    auto res = f.ast | std::views::split('(') | std::views::drop(1) | std::views::transform([](auto &&r) {
+                   auto sv = std::string_view{r};
+                   return sv.substr(0, sv.find_first_of(" :"));
+               }) |
+               std::views::filter([](auto &&sv) { return STATEMENTS.contains(std::string{sv}); });
 
-    std::string CyclomaticComplexityMetric::Name() const {
-        return "cyclomatic_complexity";
-    }
+    return static_cast<int>(std::ranges::distance(res));
+}
+
+std::string CyclomaticComplexityMetric::Name() const { return "cyclomatic_complexity"; }
 
 }  // namespace analyser::metric::metric_impl

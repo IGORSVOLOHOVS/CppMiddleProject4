@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANALYSER_METRIC_ACCUMULATOR_HPP
+#define ANALYSER_METRIC_ACCUMULATOR_HPP
 #if __has_include(<unistd.h>)  // POSIX-only header, MSVC does not ship it
 #include <unistd.h>
 #endif
@@ -42,8 +43,8 @@ struct MetricsAccumulator {
         accumulators.try_emplace(metric_name, std::move(acc));
     }
     template <typename Accumulator>
-    const Accumulator& GetFinalizedAccumulator(const std::string& metric_name) const {
-        auto& acc = dynamic_cast<Accumulator&>(*accumulators.at(metric_name));
+    const Accumulator &GetFinalizedAccumulator(const std::string &metric_name) const {
+        auto &acc = dynamic_cast<Accumulator &>(*accumulators.at(metric_name));
         acc.Finalize();
         return acc;
     }
@@ -56,3 +57,5 @@ private:
 };
 
 }  // namespace analyser::metric_accumulator
+
+#endif  // ANALYSER_METRIC_ACCUMULATOR_HPP

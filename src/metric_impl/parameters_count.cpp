@@ -16,21 +16,14 @@
 
 namespace analyser::metric::metric_impl {
 
-    MetricResult::ValueType CountParametersMetric::CalculateImpl(const function::Function& f) const{        
-        auto res = f.ast | std::views::split('\n') | 
-        std::views::transform([](auto&& r){
-            return std::string_view{r};
-        }) | std::views::take_while([](auto&& sv){
-            return !sv.contains("body");
-        }) | std::views::filter([](auto&& sv){
-            return sv.contains("identifier");
-        }) | std::ranges::to<std::vector>();
+MetricResult::ValueType CountParametersMetric::CalculateImpl(const function::Function &f) const {
+    auto res = f.ast | std::views::split('\n') | std::views::transform([](auto &&r) { return std::string_view{r}; }) |
+               std::views::take_while([](auto &&sv) { return !sv.contains("body"); }) |
+               std::views::filter([](auto &&sv) { return sv.contains("identifier"); });
 
-        return static_cast<int>(res.size() - 1); 
-    }
+    return static_cast<int>(std::ranges::distance(res) - 1);
+}
 
-    std::string CountParametersMetric::Name() const {
-        return "parameters_count";
-    }
+std::string CountParametersMetric::Name() const { return "parameters_count"; }
 
 }  // namespace analyser::metric::metric_impl

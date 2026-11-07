@@ -1,7 +1,7 @@
 #include "metric_accumulator_impl/average_accumulator.hpp"
 
-#include <gtest/gtest.h>
 #include <cmath>
+#include <gtest/gtest.h>
 #include <stdexcept>
 
 namespace analyser::metric_accumulator::metric_accumulator_impl::test {
@@ -30,7 +30,7 @@ TEST_F(AverageAccumulatorTest, AccumulateMultiple) {
     acc_.Accumulate({.metric_name = "metric1", .value = 3});
     acc_.Finalize();
 
-    ASSERT_NEAR(acc_.Get(), 11.0, tolerance); // (10+20+3)/3
+    ASSERT_NEAR(acc_.Get(), 11.0, tolerance);  // (10+20+3)/3
 }
 
 TEST_F(AverageAccumulatorTest, GetBeforeFinalize) {
@@ -47,14 +47,14 @@ TEST_F(AverageAccumulatorTest, Reset) {
 
     acc_.Accumulate({.metric_name = "metric2", .value = 20});
     acc_.Finalize();
-    
+
     ASSERT_NEAR(acc_.Get(), 20.0, tolerance);
 }
 
 TEST_F(AverageAccumulatorTest, EmptyAccumulation) {
     acc_.Reset();
     acc_.Finalize();
-    
+
     ASSERT_NEAR(acc_.Get(), 0.0, tolerance);
 }
 
@@ -63,11 +63,11 @@ TEST_F(AverageAccumulatorTest, AccumulateAfterFinalizeResets) {
     acc_.Accumulate({.metric_name = "metric1", .value = 10});
     acc_.Accumulate({.metric_name = "metric1", .value = 20});
     acc_.Finalize();
-    
+
     acc_.Accumulate({.metric_name = "metric2", .value = 30});
     acc_.Finalize();
 
     ASSERT_NEAR(acc_.Get(), 30.0, tolerance);
 }
 
-} // namespace analyser::metric_accumulator::metric_accumulator_impl::test
+}  // namespace analyser::metric_accumulator::metric_accumulator_impl::test

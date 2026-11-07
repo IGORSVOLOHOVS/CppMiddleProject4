@@ -55,78 +55,87 @@ int main(int argc, char *argv[]) {
         metric_extractor.RegisterMetric(std::make_unique<metric::CodeLinesCountMetric>());
         metric_extractor.RegisterMetric(std::make_unique<metric::CyclomaticComplexityMetric>());
         metric_extractor.RegisterMetric(std::make_unique<metric::CountParametersMetric>());
-        metric_extractor.RegisterMetric(std::make_unique<metric::NamingStyleMetric>()); 
+        metric_extractor.RegisterMetric(std::make_unique<metric::NamingStyleMetric>());
 
         auto analysis_results = analyser::AnalyseFunctions(options.GetFiles(), metric_extractor);
-        
-        analysis_results | vs::transform([](auto&& res){
+
+        analysis_results | vs::transform([](auto &&res) {
             std::println("{}{}::{}", res.func_info.filename,
                          res.func_info.class_name.has_value() ? "::" + res.func_info.class_name.value() : "",
                          res.func_info.name);
             return res.metrics;
-        }) | vs::join | vs::transform([](auto&& metric){
-            std::print("    {}: ", metric.metric_name);
-            std::visit([](const auto& val) { std::println("{}", val); }, metric.value);
-            return 0;
-        }) | rs::to<std::vector>(); 
+        }) | vs::join |
+            vs::transform([](auto &&metric) {
+                std::print("    {}: ", metric.metric_name);
+                std::visit([](const auto &val) { std::println("{}", val); }, metric.value);
+                return 0;
+            }) |
+            rs::to<std::vector>();
 
         analyser::metric_accumulator::MetricsAccumulator accumulator{};
         accumulator.RegisterAccumulator("code_lines_count", std::make_unique<metric_acc::SumAverageAccumulator>());
         accumulator.RegisterAccumulator("cyclomatic_complexity", std::make_unique<metric_acc::SumAverageAccumulator>());
         accumulator.RegisterAccumulator("parameters_count", std::make_unique<metric_acc::AverageAccumulator>());
-        accumulator.RegisterAccumulator("naming_style", std::make_unique<metric_acc::CategoricalAccumulator>()); 
+        accumulator.RegisterAccumulator("naming_style", std::make_unique<metric_acc::CategoricalAccumulator>());
 
         auto by_files = analyser::SplitByFiles(analysis_results);
-        rs::for_each(by_files, [&](const auto& file_group) {
-            if (file_group.empty()) return;
+        rs::for_each(by_files, [&](const auto &file_group) {
+            if (file_group.empty())
+                return;
             accumulator.ResetAccumulators();
             analyser::AccumulateFunctionAnalysis(file_group, accumulator);
             std::println("\nAccumulated Analysis for file {}:", file_group.front().func_info.filename);
-            
-            auto& sum_avg_clc = accumulator.GetFinalizedAccumulator<metric_acc::SumAverageAccumulator>("code_lines_count");
+
+            auto &sum_avg_clc =
+                accumulator.GetFinalizedAccumulator<metric_acc::SumAverageAccumulator>("code_lines_count");
             auto clc = sum_avg_clc.Get();
             std::println("    code_lines_count: sum = {}, average = {:.2f}", clc.sum, clc.average);
 
-            auto& sum_avg_cc = accumulator.GetFinalizedAccumulator<metric_acc::SumAverageAccumulator>("cyclomatic_complexity");
+            auto &sum_avg_cc =
+                accumulator.GetFinalizedAccumulator<metric_acc::SumAverageAccumulator>("cyclomatic_complexity");
             auto cc = sum_avg_cc.Get();
             std::println("    cyclomatic_complexity: sum = {}, average = {:.2f}", cc.sum, cc.average);
 
-            auto& avg_pc = accumulator.GetFinalizedAccumulator<metric_acc::AverageAccumulator>("parameters_count");
+            auto &avg_pc = accumulator.GetFinalizedAccumulator<metric_acc::AverageAccumulator>("parameters_count");
             std::println("    parameters_count: average = {:.2f}", avg_pc.Get());
 
-            auto& cat_ns = accumulator.GetFinalizedAccumulator<metric_acc::CategoricalAccumulator>("naming_style");
+            auto &cat_ns = accumulator.GetFinalizedAccumulator<metric_acc::CategoricalAccumulator>("naming_style");
             std::println("    naming_style:");
-            for(const auto& [style, count] : cat_ns.Get()) {
-                std::println("        {}: {}", style, count);
-            } 
-        });
-
-        auto by_classes = analyser::SplitByClasses(analysis_results);
-         rs::for_each(by_classes, [&](const auto& class_group) {
-            if (class_group.empty() || !class_group.front().func_info.class_name.has_value()) return;
-            accumulator.ResetAccumulators();
-            analyser::AccumulateFunctionAnalysis(class_group, accumulator);
-            std::println("\nAccumulated Analysis for class {}:", class_group.front().func_info.class_name.value());
-            
-            auto& sum_avg_clc = accumulator.GetFinalizedAccumulator<metric_acc::SumAverageAccumulator>("code_lines_count");
-            auto clc = sum_avg_clc.Get();
-            std::println("    code_lines_count: sum = {}, average = {:.2f}", clc.sum, clc.average);
-
-            auto& sum_avg_cc = accumulator.GetFinalizedAccumulator<metric_acc::SumAverageAccumulator>("cyclomatic_complexity");
-            auto cc = sum_avg_cc.Get();
-            std::println("    cyclomatic_complexity: sum = {}, average = {:.2f}", cc.sum, cc.average);
-
-            auto& avg_pc = accumulator.GetFinalizedAccumulator<metric_acc::AverageAccumulator>("parameters_count");
-            std::println("    parameters_count: average = {:.2f}", avg_pc.Get());
-
-            auto& cat_ns_class = accumulator.GetFinalizedAccumulator<metric_acc::CategoricalAccumulator>("naming_style");
-            std::println("    naming_style:");
-            for(const auto& [style, count] : cat_ns_class.Get()) {
+            for (const auto &[style, count] : cat_ns.Get()) {
                 std::println("        {}: {}", style, count);
             }
         });
 
-    } catch (const std::exception& e) {
+        auto by_classes = analyser::SplitByClasses(analysis_results);
+        rs::for_each(by_classes, [&](const auto &class_group) {
+            if (class_group.empty() || !class_group.front().func_info.class_name.has_value())
+                return;
+            accumulator.ResetAccumulators();
+            analyser::AccumulateFunctionAnalysis(class_group, accumulator);
+            std::println("\nAccumulated Analysis for class {}:", class_group.front().func_info.class_name.value());
+
+            auto &sum_avg_clc =
+                accumulator.GetFinalizedAccumulator<metric_acc::SumAverageAccumulator>("code_lines_count");
+            auto clc = sum_avg_clc.Get();
+            std::println("    code_lines_count: sum = {}, average = {:.2f}", clc.sum, clc.average);
+
+            auto &sum_avg_cc =
+                accumulator.GetFinalizedAccumulator<metric_acc::SumAverageAccumulator>("cyclomatic_complexity");
+            auto cc = sum_avg_cc.Get();
+            std::println("    cyclomatic_complexity: sum = {}, average = {:.2f}", cc.sum, cc.average);
+
+            auto &avg_pc = accumulator.GetFinalizedAccumulator<metric_acc::AverageAccumulator>("parameters_count");
+            std::println("    parameters_count: average = {:.2f}", avg_pc.Get());
+
+            auto &cat_ns_class =
+                accumulator.GetFinalizedAccumulator<metric_acc::CategoricalAccumulator>("naming_style");
+            std::println("    naming_style:");
+            for (const auto &[style, count] : cat_ns_class.Get()) {
+                std::println("        {}: {}", style, count);
+            }
+        });
+
+    } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }

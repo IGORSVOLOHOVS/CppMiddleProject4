@@ -66,9 +66,9 @@ TEST_F(CategoricalAccumulatorTest, Reset) {
 
 TEST_F(CategoricalAccumulatorTest, EmptyAccumulation) {
     acc_.Finalize();
-    
+
     const auto result = acc_.Get();
     ASSERT_TRUE(result.empty());
 }
 
-} // namespace analyser::metric_accumulator::metric_accumulator_impl::test
+}  // namespace analyser::metric_accumulator::metric_accumulator_impl::test

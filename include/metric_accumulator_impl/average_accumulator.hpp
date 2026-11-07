@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANALYSER_METRIC_ACCUMULATOR_IMPL_AVERAGE_ACCUMULATOR_HPP
+#define ANALYSER_METRIC_ACCUMULATOR_IMPL_AVERAGE_ACCUMULATOR_HPP
 #if __has_include(<unistd.h>)  // POSIX-only header, MSVC does not ship it
 #include <unistd.h>
 #endif
@@ -38,3 +39,5 @@ private:
 };
 
 }  // namespace analyser::metric_accumulator::metric_accumulator_impl
+
+#endif  // ANALYSER_METRIC_ACCUMULATOR_IMPL_AVERAGE_ACCUMULATOR_HPP

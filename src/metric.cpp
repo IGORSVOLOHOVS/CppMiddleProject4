@@ -27,9 +27,9 @@
 namespace analyser::metric {
 
 void MetricExtractor::RegisterMetric(std::unique_ptr<IMetric> metric) {
-    if(metric) {
+    if (metric) {
         metrics.emplace_back(std::move(metric));
-    }else{
+    } else {
         throw std::runtime_error("MetricExtractor::RegisterMetric metric is nullptr");
     }
 }
@@ -37,10 +37,12 @@ void MetricExtractor::RegisterMetric(std::unique_ptr<IMetric> metric) {
 MetricResults MetricExtractor::Get(const function::Function &func) const {
     namespace vs = std::views;
     namespace rs = std::ranges;
-    
-    return metrics | vs::transform([&func](auto&& metric){
-        return metric->Calculate(func);
-    }) | rs::to<std::vector>();
+
+    MetricResults results;
+    for (const auto &metric : metrics) {
+        results.push_back(metric->Calculate(func));
+    }
+    return results;
 }
 
 }  // namespace analyser::metric

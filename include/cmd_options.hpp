@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANALYSER_CMD_OPTIONS_HPP
+#define ANALYSER_CMD_OPTIONS_HPP
 
 #include <string>
 #include <unordered_map>
@@ -22,3 +23,5 @@ private:
 };
 
 }  // namespace analyser::cmd
+
+#endif  // ANALYSER_CMD_OPTIONS_HPP
