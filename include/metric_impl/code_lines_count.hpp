@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANALYSER_METRIC_IMPL_CODE_LINES_COUNT_HPP
+#define ANALYSER_METRIC_IMPL_CODE_LINES_COUNT_HPP
 #if __has_include(<unistd.h>)  // POSIX-only header, MSVC does not ship it
 #include <unistd.h>
 #endif
@@ -23,8 +24,10 @@
 namespace analyser::metric::metric_impl {
 
 struct CodeLinesCountMetric final : IMetric {
-    MetricResult::ValueType CalculateImpl(const function::Function& f) const;
+    MetricResult::ValueType CalculateImpl(const function::Function &f) const;
     std::string Name() const;
 };
 
 }  // namespace analyser::metric::metric_impl
+
+#endif  // ANALYSER_METRIC_IMPL_CODE_LINES_COUNT_HPP

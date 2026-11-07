@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANALYSER_FILE_HPP
+#define ANALYSER_FILE_HPP
 
 #include <fstream>
 #include <iostream>
@@ -29,3 +30,5 @@ private:
 };
 
 }  // namespace analyser::file
+
+#endif  // ANALYSER_FILE_HPP

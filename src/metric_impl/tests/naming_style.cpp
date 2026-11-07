@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 
-
 namespace analyser::metric::metric_impl {
 
 class NamingStyleMetricTest : public testing::Test {
@@ -12,7 +11,7 @@ protected:
     NamingStyleMetric m_{};
     function::Function func_info_{};
 
-    void CheckStyle(const std::string& function_name, const std::string& expected_style) {
+    void CheckStyle(const std::string &function_name, const std::string &expected_style) {
         func_info_.name = function_name;
         const auto result = m_.CalculateImpl(func_info_);
         ASSERT_EQ(std::get<std::string>(result), expected_style);
@@ -30,9 +29,7 @@ TEST_F(NamingStyleMetricTest, HandlesCamelCase) {
     CheckStyle("variable2Name", "camelCase");
 }
 
-TEST_F(NamingStyleMetricTest, HandlesSnakeCase) {
-    CheckStyle("my_function_name", "snake_case");
-}
+TEST_F(NamingStyleMetricTest, HandlesSnakeCase) { CheckStyle("my_function_name", "snake_case"); }
 
 TEST_F(NamingStyleMetricTest, HandlesLowercase) {
     CheckStyle("anotherfunction", "lowercase");
@@ -50,4 +47,4 @@ TEST(NamingStyleMetricSimpleTest, Name) {
     ASSERT_EQ(m.Name(), "naming_style");
 }
 
-} // namespace analyser::metric::metric_impl
+}  // namespace analyser::metric::metric_impl

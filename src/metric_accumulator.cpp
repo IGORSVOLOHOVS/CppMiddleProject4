@@ -26,15 +26,13 @@ namespace vs = std::views;
 namespace analyser::metric_accumulator {
 
 void MetricsAccumulator::AccumulateNextFunctionResults(const std::vector<metric::MetricResult> &metric_results) const {
-    rs::for_each(metric_results, [&accumulators = accumulators](const auto& res){
+    rs::for_each(metric_results, [&accumulators = accumulators](const auto &res) {
         accumulators.at(res.metric_name)->Accumulate(res);
     });
 }
 
 void MetricsAccumulator::ResetAccumulators() {
-    rs::for_each(accumulators | vs::values, [](auto&& acc){
-        acc->Reset();
-    });
+    rs::for_each(accumulators | vs::values, [](auto &&acc) { acc->Reset(); });
 }
 
 }  // namespace analyser::metric_accumulator

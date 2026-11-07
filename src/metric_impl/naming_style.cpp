@@ -1,14 +1,14 @@
 #include "metric_impl/naming_style.hpp"
+#include <algorithm>
 #include <cctype>
 #include <ranges>
-#include <algorithm>
 
 namespace rs = std::ranges;
 
 namespace analyser::metric::metric_impl {
 
-MetricResult::ValueType NamingStyleMetric::CalculateImpl(const function::Function& f) const {
-    const auto& name = f.name;
+MetricResult::ValueType NamingStyleMetric::CalculateImpl(const function::Function &f) const {
+    const auto &name = f.name;
     if (name.empty()) {
         return "unknown";
     }
@@ -18,9 +18,7 @@ MetricResult::ValueType NamingStyleMetric::CalculateImpl(const function::Functio
     bool has_underscore = name.find('_') != std::string::npos;
 
     if (!has_upper && has_underscore) {
-        bool is_valid_snake = rs::all_of(name, [](char c){ 
-            return std::islower(c) || std::isdigit(c) || c == '_'; 
-        });
+        bool is_valid_snake = rs::all_of(name, [](char c) { return std::islower(c) || std::isdigit(c) || c == '_'; });
         if (is_valid_snake) {
             return "snake_case";
         }
@@ -39,12 +37,10 @@ MetricResult::ValueType NamingStyleMetric::CalculateImpl(const function::Functio
             return "PascalCase";
         }
     }
-    
+
     return "unknown";
 }
 
-std::string NamingStyleMetric::Name() const {
-    return "naming_style";
-}
+std::string NamingStyleMetric::Name() const { return "naming_style"; }
 
-} // namespace analyser::metric::metric_impl
+}  // namespace analyser::metric::metric_impl

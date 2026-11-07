@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANALYSER_METRIC_HPP
+#define ANALYSER_METRIC_HPP
 #if __has_include(<unistd.h>)  // POSIX-only header, MSVC does not ship it
 #include <unistd.h>
 #endif
@@ -29,8 +30,8 @@ namespace analyser::metric {
 
 struct MetricResult {
     using ValueType = std::variant<int, std::string>;
-    std::string metric_name; 
-    ValueType value;         
+    std::string metric_name;
+    ValueType value;
 };
 
 struct IMetric {
@@ -54,3 +55,5 @@ struct MetricExtractor {
 };
 
 }  // namespace analyser::metric
+
+#endif  // ANALYSER_METRIC_HPP
