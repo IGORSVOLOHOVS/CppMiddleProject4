@@ -2,6 +2,29 @@
 
 Reverse-engineered from the code at commit `63c76b4` on 2026-11-18. Every requirement describes behaviour present in the code; the source is given as `path:line`. "Inference" marks a statement read from code and not confirmed by a run. Documentation hub: [`docs/README.md`](docs/README.md).
 
+<!-- jira-sync:start -->
+Jira: KAN-94
+
+## Tasks
+
+This list is one ticket in Jira project KAN, [KAN-94](https://igorsvolohovs.atlassian.net/browse/KAN-94). Each line is a checkbox there: tick it in Jira and the sync ticks it here; add a checkbox there and it is appended here. Done items are the features described in section 3; open items are what the project declares but the code does not do yet.
+
+- [x] Reading a file (section 3.1) <!-- spec-reading-a-file -->
+- [x] Finding functions (section 3.2) <!-- spec-finding-functions -->
+- [x] Metrics (section 3.3) <!-- spec-metrics -->
+- [x] Accumulators (section 3.4) <!-- spec-accumulators -->
+- [x] Analysis pipeline (section 3.5) <!-- spec-analysis-pipeline -->
+- [x] Command-line program (section 3.6) <!-- spec-command-line-program -->
+- [ ] An installer: (declared, not implemented) <!-- spec-an-installer -->
+- [ ] A gate for the CLI: (declared, not implemented) <!-- spec-a-gate-for-the-cli -->
+- [ ] Manual tests: (declared, not implemented) <!-- spec-manual-tests -->
+- [ ] `range-v3/0.12.0` is required in `conanfile.py:54`, but no file in `include/`, `src/` or `main.cpp` includes it. (declared, not implemented) <!-- spec-range-v3-0-12-0-is-required-in-conanfile-py-54-but -->
+- [ ] `CMakePresets.json:17` asks for C++26 while `CMakeLists.txt:5` sets 23; (declared, not implemented) <!-- spec-cmakepresets-json-17-asks-for-c-26-while-cmakelist -->
+- [ ] `.vscode/launch.json` runs `build/src/metric_impl/metric_test` and `build/src/metric_accumulator_impl/metric_accumulator_test`; (declared, not implemented) <!-- spec-vscode-launch-json-runs-build-src-metricimpl-metri -->
+- [ ] `main.cpp:50-52` runs `throw;` when option parsing returns false; (declared, not implemented) <!-- spec-main-cpp-50-52-runs-throw-when-option-parsing-retu -->
+
+<!-- jira-sync:end -->
+
 ## 1. Purpose and scope
 
 The system computes per-function metrics for Python source files and aggregates them per file and per class (`README.md`).
